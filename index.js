@@ -1,20 +1,46 @@
-const core = require('@actions/core');
-const wait = require('./wait');
-
+const core = require("@actions/core");
+const github = require("@actions/github");
 
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    const ms = core.getInput('milliseconds');
-    core.info(`Waiting ${ms} milliseconds ...`);
+    core.info(`test`);
 
-    core.debug((new Date()).toTimeString()); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-    await wait(parseInt(ms));
-    core.info((new Date()).toTimeString());
+    const token = core.getInput("token");
+    failIfMissing(token, "Can't find token");
 
-    core.setOutput('time', new Date().toTimeString());
+    const payloadContext = github.context.payload;
+    failIfMissing(payloadContext, "Can't find payload context");
+    failIfMissing(payloadContext.repository, "Can't find repository");
+    failIfMissing(payloadContext.repository.owner, "Can't find owner");
+    failIfMissing(payloadContext.repository.owner.login, "Can't find owner");
+    failIfMissing(
+      payloadContext.repository.pull_request,
+      "Can't find pull request"
+    );
+
+    const octokit = new github.GitHub(token);
+
+    const pull_number = payloadContext.pull_request.number;
+    const commitsListed = await octokit.pulls.listCommits({
+      owner: payloadContext.repository.owner.login,
+      repo: payloadContext.repository.name,
+      pull_number: pull_number,
+    });
+
+    let commits = commitsListed.data;
+
+    for (const { commit, sha } of commits) {
+      core.info(`pr number: ${commit.pull_number}, sha: ${sha}`);
+    }
   } catch (error) {
     core.setFailed(error.message);
+  }
+}
+
+function failIfMissing(val, errorMessage) {
+  if (!val) {
+    throw new Error(errorMessage);
   }
 }
 
