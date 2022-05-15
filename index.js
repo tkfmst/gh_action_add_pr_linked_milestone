@@ -14,11 +14,13 @@ async function run() {
     failIfMissing(payloadContext.repository, "Can't find repository");
     failIfMissing(payloadContext.repository.owner, "Can't find owner");
     failIfMissing(payloadContext.repository.owner.login, "Can't find owner");
-    failIfMissing(payloadContext.pull_request, "Can't find pull request");
+
+    const pull = github.event.issue.pull_request;
+    failIfMissing(pull, "Can't find pull request");
 
     const octokit = new github.GitHub(token);
 
-    const pull_number = payloadContext.pull_request.number;
+    const pull_number = pull.number;
     const commitsListed = await octokit.pulls.listCommits({
       owner: payloadContext.repository.owner.login,
       repo: payloadContext.repository.name,
