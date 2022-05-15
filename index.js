@@ -7,8 +7,40 @@ async function run() {
     core.info(`test`);
 
     core.info(JSON.stringify(github));
+    const token = core.getInput("token");
+    failIfMissing(token, "Can't find token");
+
+    const payloadContext = github.context.payload;
+    failIfMissing(payloadContext, "Can't find payload context");
+    failIfMissing(payloadContext.repository, "Can't find repository");
+    failIfMissing(payloadContext.repository.owner, "Can't find owner");
+    failIfMissing(payloadContext.repository.owner.login, "Can't find owner");
+
+    const pull = github.event.issue.pull_request;
+    failIfMissing(pull, "Can't find pull request");
+
+    const octokit = new github.GitHub(token);
+
+    const pull_number = pull.number;
+    const commitsListed = await octokit.pulls.listCommits({
+      owner: payloadContext.repository.owner.login,
+      repo: payloadContext.repository.name,
+      pull_number: pull_number,
+    });
+
+    let commits = commitsListed.data;
+
+    for (const { commit, sha } of commits) {
+      core.info(`pr number: ${commit.pull_number}, sha: ${sha}`);
+    }
   } catch (error) {
     core.setFailed(error.message);
+  }
+}
+
+function failIfMissing(val, errorMessage) {
+  if (!val) {
+    throw new Error(errorMessage);
   }
 }
 
