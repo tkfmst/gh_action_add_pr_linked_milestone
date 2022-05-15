@@ -9156,7 +9156,6 @@ async function run() {
   try {
     core.info(`test`);
 
-    core.info(JSON.stringify(github));
     const token = core.getInput("token");
     failIfMissing(token, "Can't find token");
 
@@ -9166,7 +9165,7 @@ async function run() {
     failIfMissing(payloadContext.repository.owner, "Can't find owner");
     failIfMissing(payloadContext.repository.owner.login, "Can't find owner");
 
-    const pull = github.event.issue.pull_request;
+    const pull = payloadContext.pull_request;
     failIfMissing(pull, "Can't find pull request");
 
     const octokit = new github.GitHub(token);
