@@ -14,10 +14,7 @@ async function run() {
     failIfMissing(payloadContext.repository, "Can't find repository");
     failIfMissing(payloadContext.repository.owner, "Can't find owner");
     failIfMissing(payloadContext.repository.owner.login, "Can't find owner");
-    failIfMissing(
-      payloadContext.repository.pull_request,
-      "Can't find pull request"
-    );
+    failIfMissing(payloadContext.pull_request, "Can't find pull request");
 
     const octokit = new github.GitHub(token);
 
