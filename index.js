@@ -18,7 +18,7 @@ async function run() {
     const pull = payloadContext.pull_request;
     failIfMissing(pull, "Can't find pull request");
 
-    const octokit = new github.GitHub(token);
+    const octokit = new github.getOctokit(token);
 
     const pull_number = pull.number;
     const commitsListed = await octokit.pulls.listCommits({
