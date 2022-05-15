@@ -6,6 +6,7 @@ async function run() {
   try {
     core.info(`test`);
 
+    core.info(JSON.stringify(github));
     const token = core.getInput("token");
     failIfMissing(token, "Can't find token");
 
