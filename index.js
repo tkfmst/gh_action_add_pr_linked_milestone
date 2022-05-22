@@ -4,7 +4,7 @@ const github = require("@actions/github");
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    core.info(`test`);
+    core.info(`test2`);
 
     const token = core.getInput("token");
     failIfMissing(token, "Can't find token");
