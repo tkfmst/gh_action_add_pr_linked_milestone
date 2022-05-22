@@ -26,13 +26,12 @@ async function run() {
       repo: payloadContext.repository.name,
       pull_number: pull_number,
     });
-    console.dir(commitsListed);
 
-    // let commits = commitsListed.data;
-    //
-    // for (const { commit, sha } of commits) {
-    //   core.info(`pr number: ${commit.pull_number}, sha: ${sha}`);
-    // }
+    let commits = commitsListed.data;
+
+    for (const { commit } of commits) {
+      console.dir(commit);
+    }
   } catch (error) {
     core.setFailed(error.message);
   }
