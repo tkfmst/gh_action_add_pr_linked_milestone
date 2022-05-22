@@ -17,23 +17,18 @@ async function run() {
 
     const pull = payloadContext.pull_request;
     failIfMissing(pull, "Can't find pull request");
-    // const pull_number = pull.number;
+    const pull_number = pull.number;
 
     const octokit = new github.getOctokit(token);
-    core.info(JSON.stringify(octokit));
-    core.info(console.dir(octokit));
 
-    // const commitsListed = await octokit.pulls.listCommits({
-    //   owner: payloadContext.repository.owner.login,
-    //   repo: payloadContext.repository.name,
-    //   pull_number: pull_number,
-    // });
+    const commitsListed = await octokit.pulls.listCommits({
+      owner: payloadContext.repository.owner.login,
+      repo: payloadContext.repository.name,
+      pull_number: pull_number,
+    });
 
-    // let commits = commitsListed.data;
-    //
-    // for (const { commit, sha } of commits) {
-    //   core.info(`pr number: ${commit.pull_number}, sha: ${sha}`);
-    // }
+    let commits = commitsListed.data;
+    console.dir(commits);
   } catch (error) {
     core.setFailed(error.message);
   }
