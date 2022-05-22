@@ -9154,7 +9154,7 @@ const github = __nccwpck_require__(5438);
 // most @actions toolkit packages have async methods
 async function run() {
   try {
-    core.info(`test`);
+    core.info(`test2`);
 
     const token = core.getInput("token");
     failIfMissing(token, "Can't find token");
@@ -9171,17 +9171,18 @@ async function run() {
 
     const octokit = new github.getOctokit(token);
 
-    const commitsListed = await octokit.pulls.commitsListed({
+    // const commitsListed =
+    await octokit.pulls.listCommits({
       owner: payloadContext.repository.owner.login,
       repo: payloadContext.repository.name,
       pull_number: pull_number,
     });
 
-    let commits = commitsListed.data;
+    // let commits = commitsListed.data;
 
-    for (const { commit, sha } of commits) {
-      core.info(`pr number: ${commit.pull_number}, sha: ${sha}`);
-    }
+    // for (const { commit, sha } of commits) {
+    //   core.info(`pr number: ${commit.pull_number}, sha: ${sha}`);
+    // }
   } catch (error) {
     core.setFailed(error.message);
   }
