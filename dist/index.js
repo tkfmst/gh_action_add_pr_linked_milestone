@@ -9170,7 +9170,8 @@ async function run() {
     // const pull_number = pull.number;
 
     const octokit = new github.getOctokit(token);
-    core.info(octokit);
+    core.info(JSON.stringify(octokit));
+    core.info(console.dir(octokit));
 
     // const commitsListed = await octokit.pulls.listCommits({
     //   owner: payloadContext.repository.owner.login,
