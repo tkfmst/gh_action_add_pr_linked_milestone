@@ -21,14 +21,18 @@ async function run() {
 
     const octokit = new github.getOctokit(token);
 
-    const commitsListed = await octokit.pulls.listCommits({
+    const commitsListed = await octokit.rest.pulls.listCommits({
       owner: payloadContext.repository.owner.login,
       repo: payloadContext.repository.name,
       pull_number: pull_number,
     });
+    console.dir(commitsListed);
 
-    let commits = commitsListed.data;
-    console.dir(commits);
+    // let commits = commitsListed.data;
+    //
+    // for (const { commit, sha } of commits) {
+    //   core.info(`pr number: ${commit.pull_number}, sha: ${sha}`);
+    // }
   } catch (error) {
     core.setFailed(error.message);
   }
