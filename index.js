@@ -21,7 +21,8 @@ async function run() {
 
     const octokit = new github.getOctokit(token);
 
-    const commitsListed = await octokit.pulls.listCommits({
+    // const commitsListed =
+    await octokit.pulls.listCommits({
       owner: payloadContext.repository.owner.login,
       repo: payloadContext.repository.name,
       pull_number: pull_number,
