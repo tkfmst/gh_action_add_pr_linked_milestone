@@ -27,11 +27,11 @@ async function run() {
       pull_number: pull_number,
     });
 
-    // let commits = commitsListed.data;
-    //
-    // for (const { commit, sha } of commits) {
-    //   core.info(`pr number: ${commit.pull_number}, sha: ${sha}`);
-    // }
+    let commits = commitsListed.data;
+
+    for (const { commit, sha } of commits) {
+      core.info(`pr number: ${commit.pull_number}, sha: ${sha}`);
+    }
   } catch (error) {
     core.setFailed(error.message);
   }
