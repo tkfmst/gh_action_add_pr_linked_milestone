@@ -66,7 +66,7 @@ async function run() {
       }
     );
 
-    console.log(result.toSource());
+    console.log(JSON.stringify(result));
   } catch (error) {
     core.setFailed(error.message);
   }
