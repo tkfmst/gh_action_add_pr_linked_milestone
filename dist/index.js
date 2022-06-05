@@ -9160,7 +9160,6 @@ async function run() {
     const token = core.getInput("token");
     failIfMissing(token, "Can't find token");
 
-    const octokit = new github.getOctokit(token);
     const payloadContext = github.context.payload;
     failIfMissing(payloadContext, "Can't find payload context");
     failIfMissing(payloadContext.repository, "Can't find repository");
@@ -9171,12 +9170,13 @@ async function run() {
     failIfMissing(pull, "Can't find pull request");
     const pull_number = pull.number;
 
+    const octokit = new github.getOctokit(token);
     const result = await octokit.graphql(
       `
-        query PullReqLinkedCommitAndMilestone {
-          repository(name: "cel", owner: "compass-inc") {
+        query PullReqLinkedCommitAndMilestone($pull_number: Int) {
+          repository(name: "tkfmst", owner: "test_gh_actions") {
             id
-            pullRequest(number: $pull) {
+            pullRequest(number: $pull_number) {
               id
               title
               commits(first: 100) {
@@ -9201,7 +9201,7 @@ async function run() {
         }
       `,
       {
-        pull: pull_number,
+        pull_number: pull_number,
       }
     );
 
