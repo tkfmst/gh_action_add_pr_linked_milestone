@@ -55,7 +55,7 @@ async function run() {
       }
     );
 
-    console.log(result);
+    console.debug(result);
   } catch (error) {
     core.setFailed(error.message);
   }
