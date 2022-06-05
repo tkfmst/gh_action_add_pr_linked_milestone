@@ -9168,9 +9168,9 @@ async function run() {
 
     const pull = payloadContext.pull_request;
     failIfMissing(pull, "Can't find pull request");
-    const pull_number = pull.number;
-
-    const octokit = new github.getOctokit(token);
+    // const pull_number = pull.number;
+    //
+    // const octokit = new github.getOctokit(token);
 
     console.log(payloadContext.repository);
     // let cursor;
@@ -9210,8 +9210,8 @@ async function run() {
     //     pull_number: pull_number,
     //   }
     // );
-
-    console.log(result.toSource());
+    //
+    // console.log(result.toSource());
   } catch (error) {
     core.setFailed(error.message);
   }
