@@ -9166,52 +9166,57 @@ async function run() {
     failIfMissing(payloadContext.repository.owner, "Can't find owner");
     failIfMissing(payloadContext.repository.owner.login, "Can't find owner");
 
+    const repo_names = payloadContext.repository.full_name.split("/");
+
     const pull = payloadContext.pull_request;
     failIfMissing(pull, "Can't find pull request");
-    // const pull_number = pull.number;
-    //
-    // const octokit = new github.getOctokit(token);
+    const pull_number = pull.number;
+
+    const octokit = new github.getOctokit(token);
 
     console.log(payloadContext.repository);
-    // let cursor;
-    // const result = await octokit.graphql(
-    //   `
-    //     query PullReqLinkedCommitAndMilestone {
-    //       repository(name: "cel", owner: "compass-inc") {
-    //         id
-    //         pullRequest(number: 3441) {
-    //           id
-    //           title
-    //           commits(first: 5, after: "MzU") {
-    //             nodes {
-    //               commit {
-    //                 id
-    //                 message
-    //                 associatedPullRequests(first: 1) {
-    //                   nodes {
-    //                     title
-    //                     milestone {
-    //                       title
-    //                     }
-    //                   }
-    //                 }
-    //               }
-    //             }
-    //             pageInfo {
-    //               endCursor
-    //               hasNextPage
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   `,
-    //   {
-    //     pull_number: pull_number,
-    //   }
-    // );
-    //
-    // console.log(result.toSource());
+    let cursor = "";
+    const result = await octokit.graphql(
+      `
+        query PullReqLinkedCommitAndMilestone($pull_number: Int!, $repo_name: String!, $repo_owner: String!, $cursor: String!) {
+          repository(name: $repo_name, owner: $repo_owner) {
+            id
+            pullRequest(number: $pull_number) {
+              id
+              title
+              commits(first: 100, after: $cursor) {
+                nodes {
+                  commit {
+                    id
+                    message
+                    associatedPullRequests(first: 1) {
+                      nodes {
+                        title
+                        milestone {
+                          title
+                        }
+                      }
+                    }
+                  }
+                }
+                pageInfo {
+                  endCursor
+                  hasNextPage
+                }
+              }
+            }
+          }
+        }
+      `,
+      {
+        pull_number: pull_number,
+        repo_name: repo_names[0],
+        repo_owner: repo_names[1],
+        cursor: cursor,
+      }
+    );
+
+    console.log(result.toSource());
   } catch (error) {
     core.setFailed(error.message);
   }
