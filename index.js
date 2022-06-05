@@ -21,41 +21,47 @@ async function run() {
     const pull_number = pull.number;
 
     const octokit = new github.getOctokit(token);
-    const result = await octokit.graphql(
-      `
-        query PullReqLinkedCommitAndMilestone($pull_number: Int!) {
-          repository(name: "test_gh_actions", owner: "tkfmst") {
-            id
-            pullRequest(number: $pull_number) {
-              id
-              title
-              commits(first: 100) {
-                nodes {
-                  commit {
-                    id
-                    message
-                    associatedPullRequests(first: 1) {
-                      totalCount
-                      nodes {
-                        title
-                        milestone {
-                          title
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      `,
-      {
-        pull_number: pull_number,
-      }
-    );
 
-    console.debug(result);
+    console.log(payloadContext.repository);
+    // let cursor;
+    // const result = await octokit.graphql(
+    //   `
+    //     query PullReqLinkedCommitAndMilestone {
+    //       repository(name: "cel", owner: "compass-inc") {
+    //         id
+    //         pullRequest(number: 3441) {
+    //           id
+    //           title
+    //           commits(first: 5, after: "MzU") {
+    //             nodes {
+    //               commit {
+    //                 id
+    //                 message
+    //                 associatedPullRequests(first: 1) {
+    //                   nodes {
+    //                     title
+    //                     milestone {
+    //                       title
+    //                     }
+    //                   }
+    //                 }
+    //               }
+    //             }
+    //             pageInfo {
+    //               endCursor
+    //               hasNextPage
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   `,
+    //   {
+    //     pull_number: pull_number,
+    //   }
+    // );
+
+    console.log(result.toSource());
   } catch (error) {
     core.setFailed(error.message);
   }

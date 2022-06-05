@@ -5,13 +5,12 @@ query PullReqLinkedCommitAndMilestone {
     pullRequest(number: 3441) {
       id
       title
-      commits(first: 100) {
+      commits(first: 5, after: "MzU") {
         nodes {
           commit {
             id
             message
             associatedPullRequests(first: 1) {
-              totalCount
               nodes {
                 title
                 milestone {
@@ -20,6 +19,10 @@ query PullReqLinkedCommitAndMilestone {
               }
             }
           }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
         }
       }
     }
