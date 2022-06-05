@@ -9192,10 +9192,10 @@ async function run() {
               commits(first: 100, after: $cursor) {
                 nodes {
                   commit {
-                    number
                     message
                     associatedPullRequests(first: 1) {
                       nodes {
+                        number
                         title
                         milestone {
                           number 
