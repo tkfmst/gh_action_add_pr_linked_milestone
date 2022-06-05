@@ -9174,7 +9174,7 @@ async function run() {
     const result = await octokit.graphql(
       `
         query PullReqLinkedCommitAndMilestone($pull_number: Int!) {
-          repository(name: "tkfmst", owner: "test_gh_actions") {
+          repository(name: "test_gh_actions", owner: "tkfmst") {
             id
             pullRequest(number: $pull_number) {
               id
