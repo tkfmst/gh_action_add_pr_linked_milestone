@@ -9173,7 +9173,7 @@ async function run() {
     const octokit = new github.getOctokit(token);
     const result = await octokit.graphql(
       `
-        query PullReqLinkedCommitAndMilestone($pull_number: Int) {
+        query PullReqLinkedCommitAndMilestone($pull_number: Int!) {
           repository(name: "tkfmst", owner: "test_gh_actions") {
             id
             pullRequest(number: $pull_number) {
