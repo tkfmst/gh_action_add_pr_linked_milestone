@@ -9174,8 +9174,13 @@ async function run() {
 
     const octokit = new github.getOctokit(token);
 
-    console.log(payloadContext.repository);
     let cursor = "";
+    const args = {
+      pull_number: pull_number,
+      repo_name: repo_names[1],
+      repo_owner: repo_names[0],
+      cursor: cursor,
+    };
     const result = await octokit.graphql(
       `
         query PullReqLinkedCommitAndMilestone($pull_number: Int!, $repo_name: String!, $repo_owner: String!, $cursor: String!) {
@@ -9208,14 +9213,10 @@ async function run() {
           }
         }
       `,
-      {
-        pull_number: pull_number,
-        repo_name: repo_names[1],
-        repo_owner: repo_names[0],
-        cursor: cursor,
-      }
+      args
     );
 
+    console.log(args);
     console.log(JSON.stringify(result));
   } catch (error) {
     core.setFailed(error.message);
